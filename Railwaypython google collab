@@ -1,0 +1,154 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+import scipy.stats as stats
+
+from google.colab import files
+uploaded = files.upload()
+
+df = pd.read_excel('railwayuk.xlsx')
+
+df_londonPad = df[df['Departure Station'] == 'London Paddington']
+df_manchesterPic = df[df['Departure Station'] == 'Manchester Piccadilly']
+df_londonEus = df[df['Departure Station'] == 'London Euston']
+df_liverpoolLime = df[df['Departure Station'] == 'Liverpool Lime Street']
+df_londonKings = df[df['Departure Station'] == 'London Kings Cross']
+df_londonPan = df[df['Departure Station'] == 'London St Pancras']
+df_birminghamNew = df[df['Departure Station'] == 'Birmingham New Street']
+df_york = df[df['Departure Station'] == 'York']
+df_reading = df[df['Departure Station'] == 'Reading']
+df_oxford = df[df['Departure Station'] == 'Oxford']
+df_edinburgh = df[df['Departure Station'] == 'Edinburgh Waverley']
+df_bristol = df[df['Departure Station'] == 'Bristol Temple Meads']
+
+count_Depaturestation = df['Departure Station'].value_counts()
+print(count_Depaturestation)
+
+total_purchase = df['Purchase Type'].value_counts().head(10)
+print(total_purchase)
+
+count_manchesterpic_purchasetype = df_manchesterPic['Purchase Type'].value_counts()
+print(count_manchesterpic_purchasetype)
+count_man = df_manchesterPic['Departure Station'].value_counts()
+print(count_man)
+
+plt.figure(figsize=(10, 6))
+bar_plot = sns.barplot(x=count_manchesterpic_purchasetype.index, y=count_manchesterpic_purchasetype.values)
+# Tambahkan label di dalam bar
+for index, value in enumerate(count_manchesterpic_purchasetype.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+
+plt.title('Purchase Type di Manchester Piccadilly')
+plt.xlabel('Jenis Pembelian')
+plt.ylabel('Jumlah')
+plt.xticks(rotation=45)
+plt.show()
+
+count_manchesterpic_purchasetype = df_manchesterPic['Purchase Type'].value_counts()
+print(count_manchesterpic_purchasetype)
+count_man = df_manchesterPic['Departure Station'].value_counts()
+print(count_man)
+
+plt.figure(figsize=(10, 6))
+
+online_purchases = df[df['Purchase Type'] == 'Online']
+
+online_purchase_counts = online_purchases['Departure Station'].value_counts()
+
+
+print(online_purchase_counts)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x=online_purchase_counts.index, y=online_purchase_counts.values)
+plt.title('Jumlah Pembelian Online Berdasarkan Stasiun Keberangkatan')
+plt.xlabel('Stasiun Keberangkatan')
+plt.ylabel('Jumlah Pembelian Online')
+plt.xticks(rotation=45)
+
+# Tambahkan label di dalam bar
+for index, value in enumerate(online_purchase_counts.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+
+plt.show()
+
+delay_counts = df.groupby(['Departure Station', 'Arrival Destination'])['Reason for Delay'].value_counts()
+
+# Tampilkan hasilnya
+print(delay_counts)
+
+delay_counts_df = delay_counts.reset_index(name='Count')
+print(delay_counts_df)
+
+plt.figure(figsize=(12, 8))
+heatmap = sns.heatmap(delay_counts_df.pivot_table(index=['Departure Station', 'Arrival Destination'], columns='Reason for Delay', values='Count'), annot=True, cmap='YlGnBu')
+heatmap.set_title('Jumlah Alasan Keterlambatan Berdasarkan Stasiun Keberangkatan dan Tujuan')
+plt.xlabel('Alasan Keterlambatan')
+plt.ylabel('Stasiun Keberangkatan dan Tujuan')
+plt.show()
+bar_plot = sns.barplot(x=count_manchesterpic_purchasetype.index, y=count_manchesterpic_purchasetype.values)
+# Tambahkan label di dalam bar
+for index, value in enumerate(count_manchesterpic_purchasetype.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+
+plt.title('Purchase Type di Manchester Piccadilly')
+plt.xlabel('Jenis Pembelian')
+plt.ylabel('Jumlah')
+plt.xticks(rotation=45)
+plt.show()
+
+
+station_purchase = df[df['Purchase Type'] == 'Station']
+
+station_purchasing = station_purchase['Departure Station'].value_counts()
+
+
+print(station_purchasing)
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x=station_purchasing.index, y=station_purchasing.values)
+plt.title('Jumlah Pembelian Station Berdasarkan Stasiun Keberangkatan')
+plt.xlabel('Stasiun Keberangkatan')
+plt.ylabel('Jumlah Pembelian Station')
+plt.xticks(rotation=45)
+
+# Tambahkan label di dalam bar
+for index, value in enumerate(station_purchasing.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+
+plt.show()
+
+count_bristol = df_bristol['Purchase Type'].value_counts()
+print(count_bristol)
+count_bris = df_bristol['Departure Station'].value_counts()
+print(count_bris)
+
+plt.figure(figsize=(10, 6))
+bar_plot = sns.barplot(x=count_bristol.index, y=count_bristol.values)
+# Tambahkan label di dalam bar
+for index, value in enumerate(count_bristol.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+plt.title('Purchase Type di Bristol Temple meads')
+plt.xlabel('Jenis Pembelian')
+plt.ylabel('Jumlah')
+plt.xticks(rotation=45)
+plt.show()
+
+count_edinburg = df_edinburgh['Purchase Type'].value_counts()
+print(count_edinburg)
+count_edi = df_edinburgh['Departure Station'].value_counts()
+print(count_edi)
+
+plt.figure(figsize=(10, 6))
+bar_plot = sns.barplot(x=count_edinburg.index, y=count_edinburg.values)
+# Tambahkan label di dalam bar
+for index, value in enumerate(count_edinburg.values):
+    plt.text(index, value, str(value), color='black', ha="center", va="bottom")
+plt.title('Purchase Type di Edinburgh waverley')
+plt.xlabel('Jenis Pembelian')
+plt.ylabel('Jumlah')
+plt.xticks(rotation=45)
+plt.show()
